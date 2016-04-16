@@ -24,7 +24,6 @@ def merge(line):
     """
     result = line[:]
     result.sort(key=lambda v: v == 0)
-    
     for key, number in enumerate(result):
         try:
             if number == result[key + 1] and number is not 0:
@@ -33,9 +32,7 @@ def merge(line):
 
         except IndexError:
             pass
-    
     result.sort(key=lambda v: v == 0)
-
     return result
 
 class TwentyFortyEight(object):
@@ -124,11 +121,10 @@ class TwentyFortyEight(object):
         square.  The tile should be 2 90% of the time and
         4 10% of the time.
         """
-        print("grid", self._grid)
         new_tile_value = 2 if random.random() < 0.90 else 4
         empty_tile_coords = [[row_ind, col_ind] for row_ind, row in enumerate(self._grid) 
                      for col_ind, col in enumerate(row) if self._grid[row_ind][col_ind] == 0]
-        print("empty", empty_tile_coords)
+        
         new_tile_coords = empty_tile_coords[random.randint(0, len(empty_tile_coords)) - 1]
         
         self.set_tile(new_tile_coords[0], new_tile_coords[1], new_tile_value)
