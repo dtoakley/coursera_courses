@@ -114,7 +114,7 @@ class TwentyFortyEight(object):
 
                 except IndexError:
                     break
-        # uncomment this for the true functionality - but test will fail for due randomness of new tile. 
+        # uncomment this for the true functionality - but test will fail due to randomness of new tile. 
         # if tiles_changed:
         #     self.new_tile()
 
