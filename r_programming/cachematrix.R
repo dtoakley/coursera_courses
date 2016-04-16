@@ -1,4 +1,3 @@
-
 ## This function takes a matrix object and returns a list of methods available:
 ## set matrix, get matrix, set metrix inverse, get matrix inverse
 
@@ -31,4 +30,3 @@ cacheSolve <- function(x, ...) {
   x$setInverse(inverse)
   inverse
 }
-
