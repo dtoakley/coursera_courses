@@ -15,6 +15,11 @@ best <- function(state, outcome) {
   
 }
 
+# print(best("TX", "heart attack"))
+# print(best("TX", "heart failure"))
+# print(best("BB", "heart attack"))
+# print(best("NY", "hert attack"))
+
 rankhospital <- function(state, outcome, num = "best") {
 
   ## Check that state and outcome are valid
@@ -32,11 +37,14 @@ rankhospital <- function(state, outcome, num = "best") {
   sorted_state_data[num, 2]
   
 }
+# print(rankhospital("TX", "heart failure", 4))
+# print(rankhospital("MD", "heart attack", "worst"))
+# print(rankhospital("MN", "heart attack", 5000))
 
 rankall <- function(outcome, num = "best") {
 
   ## For each state, find the hospital of the given rank
-  state <- levels(factor(data[, 7]))
+  state <- unique(data[, 7])
   hospital <- vector(mode="character")           
   
   for (i in seq(state)) {
@@ -46,3 +54,5 @@ rankall <- function(outcome, num = "best") {
   ## Return a data frame with the hospital names and the
   data.frame(hospital, state)
 }
+
+
