@@ -15,11 +15,6 @@ best <- function(state, outcome) {
   
 }
 
-# print(best("TX", "heart attack"))
-# print(best("TX", "heart failure"))
-# print(best("BB", "heart attack"))
-# print(best("NY", "hert attack"))
-
 rankhospital <- function(state, outcome, num = "best") {
 
   ## Check that state and outcome are valid
@@ -31,15 +26,12 @@ rankhospital <- function(state, outcome, num = "best") {
   outcome_col <- possible_outcomes[outcome][[1]]
   sorted_state_data <- state_data[order(as.numeric(state_data[[outcome_col]]), state_data[[2]]),]
   
-  if (num=="best") num = 1
-  if (num=='worst') num = nrow(sorted_state_data)
+  if (num == "best") num <- 1
+  if (num == "worst") num <- nrow(sorted_state_data)
   
   sorted_state_data[num, 2]
   
 }
-# print(rankhospital("TX", "heart failure", 4))
-# print(rankhospital("MD", "heart attack", "worst"))
-# print(rankhospital("MN", "heart attack", 5000))
 
 rankall <- function(outcome, num = "best") {
 
@@ -54,11 +46,3 @@ rankall <- function(outcome, num = "best") {
   ## Return a data frame with the hospital names and the
   data.frame(hospital, state)
 }
-
-print(head(rankall("heart attack", 20), 10))
-print(tail(rankall("pneumonia", "worst"), 3))
-print(tail(rankall("heart failure"), 10))
-
-
-
-
