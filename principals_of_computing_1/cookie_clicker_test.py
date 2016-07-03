@@ -117,6 +117,4 @@ class TestClickerState(object):
         clicker_state = simulate_clicker(build_info, self.sim_time, strategy_best)
 
         # then
-        print(clicker_state)
         assert clicker_state._total_cookies > 1.3 * 10**18
-        assert False
