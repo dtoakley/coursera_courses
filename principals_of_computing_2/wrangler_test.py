@@ -1,7 +1,7 @@
 import math
 import pytest, unittest
 from mock import Mock
-from wrangler import remove_duplicates, intersect
+from wrangler import remove_duplicates, intersect, merge, merge_sort
 
 class TestWrangler(object):
 
@@ -25,10 +25,20 @@ class TestWrangler(object):
 
     def test_intersect(self):
         # given
-        result = [1, 2, 3, 4, 6, 10]
+        expected = [1, 2, 3, 4, 6, 10]
 
         # when
-        intersect_list = intersect(self.sorted_list1, self.sorted_list2)
+        result = intersect(self.sorted_list1, self.sorted_list2)
 
         # then
-        assert result == intersect_list
+        assert result == expected
+
+    def test_merge(self):
+        # given
+        expected = [1, 2, 3, 4, 5, 6, 7, 8, 10]
+
+        # when
+        result = merge(self.sorted_list1, self.sorted_list2)
+
+        # then
+        assert result == expected
