@@ -1,7 +1,7 @@
 import math
 import pytest, unittest
 from mock import Mock
-from wrangler import remove_duplicates, intersect, merge, merge_sort
+from wrangler import remove_duplicates, intersect, merge, merge_sort, gen_all_strings
 
 class TestWrangler(object):
 
@@ -35,10 +35,12 @@ class TestWrangler(object):
 
     def test_merge(self):
         # given
-        expected = [1, 2, 3, 4, 5, 6, 7, 8, 10]
+        a = [3, 4, 5]
+        b = [3, 4, 5]
+        expected = [3, 3, 4, 4, 5, 5]
 
         # when
-        result = merge(self.sorted_list1, self.sorted_list2)
+        result = merge(a, b)
 
         # then
         assert result == expected
@@ -46,10 +48,30 @@ class TestWrangler(object):
     def test_merge_sort(self):
         # given
         to_merge_sort = [1, 9, 9, 5, 7, 7, 4, 5, 2, 3, 4, 8, 6, 10]
-        expected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        expected = [1, 2, 3, 4, 4, 5, 5, 6, 7, 7, 8, 9, 9, 10]
 
         # when
         result = merge_sort(to_merge_sort)
 
         # then
         assert result == expected
+
+
+    def test_gen_all_strings(self):
+        # given
+        start = "aab"
+        expected = ["", "b", "a", "ab", "ba", "a", "ab", "ba", "aa", "aa", "aab", "aab", "aba", "aba", "baa", "baa"]
+
+        # when
+        result = gen_all_strings(start)
+        print result
+        # then
+        assert result == expected
+
+
+
+
+
+
+
+

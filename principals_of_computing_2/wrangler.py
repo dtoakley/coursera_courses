@@ -55,17 +55,18 @@ def merge(list1, list2):
 
     This function can be iterative.
     """
-    result = []
-    while list1 and list2:
-        if list1[0] <= list2[0] and list1[0] not in result:
-            result.append(list1.pop(0))
-        elif list2[0] not in result:
-            result.append(list2.pop(0))
-        else:
-            list1.pop(0)
-            list2.pop(0)
+    result = []    
+    lista = list1[:]
+    listb = list2[:]
 
-    return result + list1 + list2
+    while lista and listb:
+        if lista[0] <= listb[0]:
+            result.append(lista.pop(0))
+        else:
+            result.append(listb.pop(0))
+
+    return result + lista + listb
+    
 
 def merge_sort(list1):
     """
@@ -77,12 +78,10 @@ def merge_sort(list1):
     """
     if len(list1) <= 1:
         return list1
-    mid = len(list1) / 2
-    list1_a = list1[0:mid]
-    list2_a = list1[mid:]
-    list1_a = merge_sort(list1_a)
-    list2_b = merge_sort(list2_a)
-    return merge(list1_a, list2_b)
+
+    list_a, list_b = list1[:len(list1)/2], list1[len(list1)/2:]
+    sorted_list_a, sorted_list_b = merge_sort(list_a), merge_sort(list_b)
+    return merge(sorted_list_a , sorted_list_b)
 
 # Function to generate all strings for the word wrangler game
 
@@ -96,7 +95,20 @@ def gen_all_strings(word):
 
     This function should be recursive.
     """
-    return []
+        
+    if len(word) < 1:
+        return [word]
+
+    first_letter, rest = word[0], word[1:]
+    rest_strings = gen_all_strings(rest)
+
+    new_strings = []
+    for string in rest_strings:
+        new_string_list = [string[:i] + first_letter + string[i:] for i in range(len(string) + 1)]
+        new_strings.extend(new_string_list)
+    
+    rest_strings.extend(new_strings)
+    return rest_strings
 
 # Function to load words from a file
 
