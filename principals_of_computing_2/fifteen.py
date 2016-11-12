@@ -152,25 +152,25 @@ class Puzzle:
         move_string = ""
         
         row_delta = target_row - row
-        column_delta = target_col - col
+        col_delta = target_col - col
 
         move_string += row_delta * "u"
 
-        if column_delta == 0:
+        if col_delta == 0:
             move_string += "ld" + (row_delta - 1) * "druld"
         else:
-            if column_delta > 0:
-                move_string += column_delta * "l"
+            if col_delta > 0:
+                move_string += col_delta * "l"
                 if row == 0:
-                    move_string += (abs(column_delta) - 1) * "drrul"
+                    move_string += (abs(col_delta) - 1) * "drrul"
                 else:
-                    move_string += (abs(column_delta) - 1) * "urrdl"
-            elif column_delta < 0:
-                move_string += (abs(column_delta) - 1)  * "r"
+                    move_string += (abs(col_delta) - 1) * "urrdl"
+            elif col_delta < 0:
+                move_string += (abs(col_delta) - 1)  * "r"
                 if row == 0:
-                    move_string += abs(column_delta) * "rdllu"
+                    move_string += abs(col_delta) * "rdllu"
                 else:
-                    move_string += abs(column_delta) * "rulld"
+                    move_string += abs(col_delta) * "rulld"
             move_string += row_delta * "druld"
 
         return move_string
@@ -260,7 +260,7 @@ class Puzzle:
             return move_string
         else: 
             move = self.get_move_string(1, target_col - 1, row, col)
-            move += 'urdlurrdluldrruld'
+            move += "urdlurrdluldrruld"
             self.update_puzzle(move)
             move_string += move
 
@@ -273,7 +273,7 @@ class Puzzle:
         """
         row, col = self.current_position(1, target_col)
         move_string = self.get_move_string(1, target_col, row, col)
-        move_string += 'ur'
+        move_string += "ur"
 
         self.update_puzzle(move_string)
         return move_string
@@ -286,16 +286,52 @@ class Puzzle:
         Solve the upper left 2x2 part of the puzzle
         Updates the puzzle and returns a move string
         """
-        # replace with your code
-        return ""
+        move_string = ""
+        first_move = ""
+
+        if self.get_number(1, 1) == 0:
+            first_move += "ul"
+            self.update_puzzle(first_move)
+            
+            if (0, 1) == self.current_position(0, 1) and (1, 1) == self.current_position(1, 1):
+                return first_move
+
+            if self.get_number(0, 1) < self.get_number(1, 0):
+                move_string += "rdlu"
+            else:
+                move_string += "drul"        
+            self.update_puzzle(move_string)
+            
+        return first_move + move_string
 
     def solve_puzzle(self):
         """
         Generate a solution string for a puzzle
         Updates the puzzle and returns a move string
         """
-        # replace with your code
-        return ""
+        move_string = ""
+
+        row = self.get_height() - 1
+        col = self.get_width() - 1
+        current_row, current_col = self.current_position(0, 0)
+    
+        col_delta = current_col - col
+        row_delta = current_row - row
+        step = abs(col_delta) * "r" + abs(row_delta) * "d"
+        self.update_puzzle(step)
+        move_string += step
+
+        for temp_row in range(row, 1, -1):
+            for temp_col in range(col, 0, -1):
+                move_string += self.solve_interior_tile(temp_row, temp_col)
+            move_string += self.solve_col0_tile(temp_row)
+
+        for temp_col in range(col, 1, -1):
+            move_string += self.solve_row1_tile(temp_col)
+            move_string += self.solve_row0_tile(temp_col)
+
+        move_string += self.solve_2x2()
+        return move_string
 
 # Start interactive simulation
 #poc_fifteen_gui.FifteenGUI(Puzzle(4, 4))

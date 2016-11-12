@@ -190,6 +190,16 @@ class TestPuzzle(object):
 		result = test_puzzle.solve_row0_tile(2)
 
 		# then
-		assert result == ""
+		assert result == "ldlurdlurrdluldrruld"
+
+	def test_solve_2x2_1(self):
+		# given 
+		test_puzzle = Puzzle(3, 3, [[4, 3, 2], [1, 0, 5], [6, 7, 8]])
+
+		# when
+		result = test_puzzle.solve_2x2()
+
+		# then
+		assert result == "uldrul"
 
 
