@@ -42,6 +42,16 @@ class TestPuzzle(object):
 		# then
 		assert result == True
 
+	def test_lower_row_invariant_true_5(self):
+		# given 
+		test_puzzle = Puzzle(4, 5, [[7, 12, 11, 5, 3], [6, 2, 10, 9, 4], [1, 8, 13, 14, 0], [15, 16, 17, 18, 19]])
+
+		# when
+		result = test_puzzle.lower_row_invariant(2, 4)
+
+		# then
+		assert result == True
+
 	def test_lower_row_invariant_false_1(self):
 		# when
 		result = self.test_lower_right_false_1.lower_row_invariant(3, 2)
@@ -126,4 +136,60 @@ class TestPuzzle(object):
 
 		# then
 		assert result == "uulldrruldrulddruld"
+
+	def test_solve_col0_1(self):
+		# given
+		test_puzzle = Puzzle(3, 3, [[3, 2, 1], [6, 5, 4], [0, 7, 8]])
+
+		# when
+		assert test_puzzle.lower_row_invariant(2, 0)
+		result = test_puzzle.solve_col0_tile(2)
+		assert test_puzzle.lower_row_invariant(1, 2)
+
+		# then
+		assert result == "urr"
+
+	def test_solve_col0_2(self):
+		# given
+		test_puzzle = Puzzle(4, 5, [[12, 11, 10, 9, 15], [7, 6, 5, 4, 3], [2, 1, 8, 13, 14], [0, 16, 17, 18, 19]])
+
+		# when
+		assert test_puzzle.lower_row_invariant(3, 0)
+		result = test_puzzle.solve_col0_tile(3)
+		print test_puzzle
+		assert test_puzzle.lower_row_invariant(2, 4)
+
+		# then
+		assert result == "uruurrrdllurdllurdlludrulddruldruldrdlurdluurddlurrrr"
+
+	def test_row0_invarien_1(self):
+		# given 
+		test_puzzle = Puzzle(3, 3, [[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+
+		# when
+		result = test_puzzle.row0_invariant(0)
+
+		# then
+		assert result == True
+
+	def test_row0_invarient_2(self):
+		# given 
+		test_puzzle = Puzzle(4, 5, [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14], [15, 16, 17, 18, 19]])
+
+		# when
+		result = test_puzzle.row0_invariant(0)
+
+		# then
+		assert result == True
+
+	def test_solve_row0_1(self):
+		# given
+		test_puzzle = Puzzle(3, 3, [[4, 1, 0], [2, 3, 5], [6, 7, 8]])
+
+		# when
+		result = test_puzzle.solve_row0_tile(2)
+
+		# then
+		assert result == ""
+
 

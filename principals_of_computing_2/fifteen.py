@@ -1,5 +1,5 @@
 """
-Loyd's Fifteen puzzle - solver and visualizer
+Loyd"s Fifteen puzzle - solver and visualizer
 Note that solved configuration has the blank (zero) tile in upper left
 Use the arrows key to swap this tile with its neighbors
 """
@@ -131,7 +131,7 @@ class Puzzle:
         at the given position in the bottom rows of the puzzle (target_row > 1)
         Returns a boolean
         """
-        if self.get_number(target_row, target_col) != 0:
+        if not self.get_number(target_row, target_col) == 0:
             return False
 
         for row in range(self.get_height() - 1, target_row, -1):
@@ -145,36 +145,44 @@ class Puzzle:
 
         return True
 
+    def get_move_string(self, target_row, target_col, row, col):
+        """
+        Builds and returns the move_string
+        """
+        move_string = ""
+        
+        row_delta = target_row - row
+        column_delta = target_col - col
+
+        move_string += row_delta * "u"
+
+        if column_delta == 0:
+            move_string += "ld" + (row_delta - 1) * "druld"
+        else:
+            if column_delta > 0:
+                move_string += column_delta * "l"
+                if row == 0:
+                    move_string += (abs(column_delta) - 1) * "drrul"
+                else:
+                    move_string += (abs(column_delta) - 1) * "urrdl"
+            elif column_delta < 0:
+                move_string += (abs(column_delta) - 1)  * "r"
+                if row == 0:
+                    move_string += abs(column_delta) * "rdllu"
+                else:
+                    move_string += abs(column_delta) * "rulld"
+            move_string += row_delta * "druld"
+
+        return move_string
+
+
     def solve_interior_tile(self, target_row, target_col):
         """
         Place correct tile at target position
         Updates puzzle and returns a move string
         """
-        move_string = ""
         row, col = self.current_position(target_row, target_col)
-        
-        row_delta = target_row - row
-        column_delta = target_col - col
-        print target_row, row
-
-        move_string += row_delta * "u"
-
-        if column_delta == 0:
-            move_string += 'ld' + (row_delta - 1) * 'druld'
-        else:
-            if column_delta > 0:
-                move_string += column_delta * 'l'
-                if row == 0:
-                    move_string += (abs(column_delta) - 1) * 'drrul'
-                else:
-                    move_string += (abs(column_delta) - 1) * 'urrdl'
-            elif column_delta < 0:
-                move_string += (abs(column_delta) - 1)  * 'r'
-                if row == 0:
-                    move_string += abs(column_delta) * 'rdllu'
-                else:
-                    move_string += abs(column_delta) * 'rulld'
-            move_string += row_delta * 'druld'
+        move_string = self.get_move_string(target_row, target_col, row, col)
         
         self.update_puzzle(move_string)
         
@@ -185,8 +193,22 @@ class Puzzle:
         Solve tile in column zero on specified row (> 1)
         Updates puzzle and returns a move string
         """
-        # replace with your code
-        return ""
+        
+        move_string = "ur"
+        self.update_puzzle(move_string)
+        row, col = self.current_position(target_row, 0)
+
+        if row == target_row and col == 0:
+            move = (self.get_width() - 2) * "r"
+            self.update_puzzle(move)
+            move_string += move
+        else:
+            move = self.get_move_string(target_row - 1, 1, row, col)
+            move += "ruldrdlurdluurddlu" + (self.get_width() - 1) * "r"
+            self.update_puzzle(move)
+            move_string += move
+
+        return move_string
 
     #############################################################
     # Phase two methods
@@ -197,8 +219,16 @@ class Puzzle:
         at the given column (col > 1)
         Returns a boolean
         """
-        # replace with your code
-        return False
+        if not self.get_number(0, target_col) == 0:
+            return False
+
+        for row in range(self.get_height()):
+            for col in range(self.get_width()):
+                if (row == 0 and col > target_col) or (row == 1 and col >= target_col) or row > 1:
+                    if not (row, col) == self.current_position(row, col):
+                        return False
+
+        return True
 
     def row1_invariant(self, target_col):
         """
@@ -206,24 +236,47 @@ class Puzzle:
         at the given column (col > 1)
         Returns a boolean
         """
-        # replace with your code
-        return False
+        if not self.get_number(1, target_col) == 0:
+            return False
+
+        for row in range(2, self.get_height()):
+            for col in range(self.get_width()):
+                if not (row, col) == self.current_position(row, col):
+                    return False
+
+        return True
 
     def solve_row0_tile(self, target_col):
         """
         Solve the tile in row zero at the specified column
         Updates puzzle and returns a move string
         """
-        # replace with your code
-        return ""
+        move_string = "ld"
+        self.update_puzzle(move_string)
+
+        row, col = self.current_position(0, target_col)
+
+        if row == 0 and col == target_col:
+            return move_string
+        else: 
+            move = self.get_move_string(1, target_col - 1, row, col)
+            move += 'urdlurrdluldrruld'
+            self.update_puzzle(move)
+            move_string += move
+
+        return move_string
 
     def solve_row1_tile(self, target_col):
         """
         Solve the tile in row one at the specified column
         Updates puzzle and returns a move string
         """
-        # replace with your code
-        return ""
+        row, col = self.current_position(1, target_col)
+        move_string = self.get_move_string(1, target_col, row, col)
+        move_string += 'ur'
+
+        self.update_puzzle(move_string)
+        return move_string
 
     ###########################################################
     # Phase 3 methods
